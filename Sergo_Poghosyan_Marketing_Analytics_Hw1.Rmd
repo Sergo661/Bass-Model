@@ -1,0 +1,87 @@
+---
+title: "Bass Model"
+author: "Sergo Poghosyan"
+date: "2/27/2024"
+output:
+  pdf_document: default
+  html_document: default
+  
+---
+
+
+From the TIME’s the best inventions of 2023 this paper will focus on KIA Electric Vehicle 6, its look-alike innovation from the past, estimated Bass Model, predictions made on diffusion, as well as the number of world-wide adopters of this product.
+
+Nowadays, electric vehicles are very expensive, however, KIA’s EV6 GT, named the 2023 World Performance Car at the world car award, is different. This car costs about the half of the other electric vehicles, nonetheless, it performs not worse than others. It can go from 0 to 100 in 3.4 seconds, has a top speed of 260kph, and even has “drift mode”. (TIME, 2023)
+
+Kia's EV6 GT embodies the essence of Kia's fresh brand approach, which centers around the idea that movement fuels human progress, enabling individuals to explore new destinations, forge meaningful connections, and embrace novel adventures. Kia is dedicated to empowering its customers by providing captivating products, inventive interior environments within vehicles, and convenient services that spark inspiration and liberate time for pursuing their passions. (TIME, 2023)
+
+The look-like product is BMW i electric series. The KIA EV6 GT and BMW i electric series share several commonalities despite being from different manufacturers. Both vehicles represent a commitment to electric mobility, offering environmentally friendly alternatives to traditional gasoline-powered cars. 
+
+They prioritize sustainability and innovation, incorporating cutting-edge technology to enhance performance and efficiency. Additionally, both models feature sleek and modern designs, reflecting a forward-thinking approach to automotive aesthetics. 
+
+Moreover, they aim to provide a premium driving experience, combining responsive handling, advanced safety features, and luxurious interiors. Overall, the KIA EV6 GT and BMW i electric series showcase the evolving landscape of electric vehicles, contributing to the shift towards more sustainable transportation solutions.
+For a look-like innovation, the data is found from statista.com. The time series data represent world-wide sales in units from 2014 to 2023.      
+
+\newpage
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(ggpubr)
+library(knitr)
+library(diffusion)
+library(readxl)
+library(DIMORA)
+```
+
+
+```{r echo=FALSE}
+data_bmw <- read_excel("bmw_electric_sales.xlsx")
+```
+
+
+```{r include=FALSE}
+df <- data_bmw[1:9,]
+colnames <- c("Year", "Sales In Unit")
+df$Year <- as.integer(df$Year)
+df$`Sales In Unit` <- as.integer(df$`Sales In Unit`)
+df
+```
+
+
+```{r echo=FALSE}
+ggplot(data = df, aes(x = Year, y = `Sales In Unit`)) + 
+  geom_bar(stat = "identity") + 
+  geom_text(aes(label = `Sales In Unit`), 
+            position = position_dodge(width = 0.5), vjust = -0.5)+
+  scale_x_continuous(breaks = 2014:2022, labels = 2014:2022) +
+  theme_minimal() +
+  labs(title = "BMW Electric I Series World-Wide Sales", x = "", y = "Sales In Unit")+
+  theme(plot.title = element_text(hjust = 0.5), axis.text.y = element_blank())
+
+```
+As we can see we have we have strong growth in BMW electric i series sales over the years. Altough we can observe some decline during 2020-2021, it may happened due to various reasons such as COVID-19.
+
+
+\newpage
+```{r echo=FALSE}
+summary(BM(df$`Sales In Unit`))
+```
+
+I've tried to implement the bass model in a manual way, however, I was getting unreasonable results with high p-value. Altough this method doesn't show the best results, it is better than the bass model with manual implementation. Here we can see that the market share value is about 900000, innovation rate is about 0.02 and imitation rate is about 0.1. In my opinion these two products are more or less similar considering their features. Therefore, it is better to keep all the final results we have from our bass model
+
+
+\newpage
+
+## Sources\
+
+*The product*
+
+https://time.com/collection/best-inventions-2023/6326978/kia-ev6-gt/
+
+*The look-like product*
+
+https://www.statista.com/statistics/417011/global-sales-of-bmw-i-electric-vehicles/
+
